@@ -1,0 +1,5 @@
+Flask==1.1.1
+bson==0.5.9
+flask-restful-swagger==0.20.1
+flask-swagger-ui==3.20.9
+Flask-Cors==3.0.8
