@@ -3,7 +3,6 @@ from flask import Flask
 
 current_app = Flask(__name__)
 
-
 def create_app():
     # General config for APP
     # current_app.config.from_object(Config)
@@ -41,3 +40,4 @@ def register_blueprints_api(curr_app):
     from blueprints import routes as api_bp
     curr_app.register_blueprint(api_bp.blueprint)
     # app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
+

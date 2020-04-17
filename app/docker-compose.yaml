@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mongo-dev:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - "~/data/db-dev:/data/db"
+  redis-dev:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - "~/config/redis.conf:/redis.conf"
+  statistics-module:
+    build: .
+    image: statistic-module:v0.1-beta
+    ports: 
+      - "5000:5000"
+    links:
+      - redis-dev
+      - functions-services
+  functions-services:
+    image: database-functions/v1.0-beta:latest
+    environment:
+        - PORT=4041
+    ports: 
+        - "4041:4041"
+    links:
+      - mongo-dev 
