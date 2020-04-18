@@ -3,7 +3,7 @@ FROM python:3.7.3
 
 WORKDIR /usr/src/app
 
-COPY app /usr/src/app
+COPY . /usr/src/app
 #COPY commit /usr/src/app/commit
 
 RUN pip install .
