@@ -1,7 +1,16 @@
 
+'''
+This module makes as bridge between the incoming requets and the faas making the requests,
+to each funtion depending on the request
+Each method executes a request to an url defined on the module "functionUrlCatalog.py",
+that is a mapping between function and url endpoint
+'''
+
+
 import requests
 import services.functionUrlCatalog as furlcatalog
 import inspect
+import datetime
 #This dictioray matches a requests module function with a method name, 
 # so that the method verb doens't have to be hardcoded. Insteasd it will be obtyained from the dictionary
 requestMethods = {
@@ -27,21 +36,20 @@ def execRequest(method,function, body):
     r = requestMethods[mehtod](uri, json=body)
     return r
 
-def getStatistics(mongoUri, userId, filter_):
+def getStatistics( clientId, filter_):
     """Gets all statistics based on the filter passed
     
     Arguments:
-        mongoUri {[String]} -- [Mongodb uri comming from the routing service on the future]
-        userId {[String]} -- [Unique identifier of the current user]
+        clientId {[String]} -- [Unique identifier of the current user client id]
         filter_ {[Object]} -- [Filter used to execute the get request]
     
     Returns:
-        [type] -- [description]
+        [type] -- [List with all the statistics by user id]
     """
     body = {
 
-        "mongoUri": mongoUri,
-        "userId": userId,
+        
+        "clientId": clientId,
         "filter": filter_ 
     }
     # TODO: Implement exception handling
@@ -50,16 +58,215 @@ def getStatistics(mongoUri, userId, filter_):
     r = execRequest("GET", currentFunctionName,  body)
     return r.text
 
-def newStatistics(mongoUri, userId, statistic):
+def newStatistic( clientId, statistic):
+    """Creates a new statistic object
+    
+    Arguments:
+        userId {[String]} -- [Unique identifier of the current user client id]
+        statistic {[Object]} -- [Statistic object to create]
+    
+    Returns:
+        [type] -- [Newly created statistic object]
+    """
     body = {
 
-        "mongoUri": mongoUri,
-        "userId": userId,
-        "filter": statistic
+        "clientId": clientId,
+        "statistic": statistic
     }
     # TODO: Implement exception handling
-    uri = furlcatalog.catalog["newStatistic"]
-    r = requests.post(uri, data=body)
-   
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("POST", currentFunctionName,  body)
     return r.text
 
+def deleteStatistic( clientId, selector):
+    """Deletes one statistic object selected by selector object. typically its id
+
+    Arguments:
+        clientId {[type]} -- [description]
+        selector {[type]} -- [description]
+
+    Returns:
+        [type] -- [deletion operation result]
+    """
+
+    body = {
+
+        "clientId": clientId,
+        "selector": selector
+    }
+    # TODO: Implement exception handling
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("DELETE", currentFunctionName,  body)
+    return r.text
+
+def updateStatistic( clientId, selector, values):
+    """Updates one statistic object selected by selector object. typically its id
+
+    Arguments:
+        clientId {object} -- [description]
+        selector {object} -- [description]
+        values   {object} -- Object with properties to updates and their new values
+
+    Returns:
+        [type] -- [updated statistic object]
+    """
+
+    body = {
+
+        "clientId": clientId,
+        "selector": selector,
+        "values": values
+    }
+    # TODO: Implement exception handling
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("PUT", currentFunctionName,  body)
+    return r.text
+
+def addValueStatistic( clientId, selector, values):
+    """Updates one statistic object selected by selector object. typically its id
+
+    Arguments:
+        clientId {object} -- [description]
+        selector {object} -- [description]
+        values   {object} -- Object with properties to updates and their new values
+
+    Returns:
+        [type] -- [updated statistic object]
+    """
+
+    body = {
+
+        "clientId": clientId,
+        "selector": selector,
+        "values": values
+    }
+
+    # TODO: Implement exception handling
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("PUT", currentFunctionName,  body)
+    return r.text
+
+def getEvents( clientId, filter_):
+    """Gets all events based on the filter passed
+    
+    Arguments:
+        clientId {[String]} -- [Unique identifier of the current user client id]
+        filter_ {[Object]} -- [Filter used to execute the get request]
+    
+    Returns:
+        [type] -- [List with all the statistics by user id]
+    """
+    body = {
+
+        
+        "clientId": clientId,
+        "filter": filter_ 
+    }
+    # TODO: Implement exception handling
+    
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("GET", currentFunctionName,  body)
+    return r.text
+
+def newEvent( clientId, event):
+    """Creates a new event object
+    
+    Arguments:
+        userId {[String]} -- [Unique identifier of the current user client id]
+        event {[Object]} -- [event object to create]
+    
+    Returns:
+        [type] -- [Newly created event object]
+    """
+    body = {
+
+        "clientId": clientId,
+        "event": event
+    }
+    # TODO: Implement exception handling
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("POST", currentFunctionName,  body)
+    return r.text
+
+def deleteEvent( clientId, selector):
+    """Deletes one event object selected by selector object. typically its id
+
+    Arguments:
+        clientId {[type]} -- [description]
+        selector {[type]} -- [description]
+
+    Returns:
+        [type] -- [deletion operation result]
+    """
+
+    body = {
+
+        "clientId": clientId,
+        "selector": selector
+    }
+    # TODO: Implement exception handling
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("DELETE", currentFunctionName,  body)
+    return r.text
+
+def getSeasons( clientId, filter_):
+    """Gets all seasons based on the filter passed
+    
+    Arguments:
+        clientId {[String]} -- [Unique identifier of the current user client id]
+        filter_ {[Object]} -- [Filter used to execute the get request]
+    
+    Returns:
+        [type] -- [List with all the statistics by user id]
+    """
+    body = {
+
+        
+        "clientId": clientId,
+        "filter": filter_ 
+    }
+    # TODO: Implement exception handling
+    
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("GET", currentFunctionName,  body)
+    return r.text
+def newSeason( clientId, season):
+    """Creates a new season object
+    
+    Arguments:
+        userId {[String]} -- [Unique identifier of the current user client id]
+        season {[Object]} -- [season object to create]
+    
+    Returns:
+        [type] -- [Newly created season object]
+    """
+    body = {
+
+        "clientId": clientId,
+        "season": season
+    }
+    # TODO: Implement exception handling
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("POST", currentFunctionName,  body)
+    return r.text
+
+def deleteSeason( clientId, selector):
+    """Deletes one season object selected by selector object. typically its id
+
+    Arguments:
+        clientId {[type]} -- [description]
+        selector {[type]} -- [description]
+
+    Returns:
+        [type] -- [deletion operation result]
+    """
+
+    body = {
+
+        "clientId": clientId,
+        "selector": selector
+    }
+    # TODO: Implement exception handling
+    currentFunctionName = inspect.currentframe().f_code.co_name
+    r = execRequest("DELETE", currentFunctionName,  body)
+    return r.text
